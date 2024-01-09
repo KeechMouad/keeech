@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>من سيربح الــخمسيــن</title>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #eff4f9; /* لون الخلفية الرمادي الفاتح */
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    #logo {
+      width: 80%;
+      max-width: 300px;
+      height: auto;
+      margin-bottom: 20px;
+      border-radius: 50%;
+    }
+
+    #start-button,
+    .choice-button {
+      padding: 10px 60px;
+      font-size: 18px;
+      margin: 60px 0px 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color #25778a;
+    }
+
+    h2{
+      text-align: center;
+
+}
+
+    h1{
+
+         margin: -15px 0px 0px ;
+}
+
+    #start-button {
+      background-color: #4CAF50;
+      color: white;
+    }
+
+    .choice-button {
+      background-color: #ddd;
+      color: #555;
+      margin: 20px 0px;
+      display: block ; 
+      width: 100% ; 
+      align-content: center;
+    }
+
+    .choice-button:hover {
+      background-color: #afd7e0;
+    }
+
+    #footer {
+      position: fixed;
+      bottom: 0px;
+      padding:10px ;
+      text-align: center;
+      width: 100%;
+      color: #555;
+      font-size: 14px;
+      background-color: #afd7e0;
+    }
+
+    #result-page {
+      background-color: #eff4f9;
+      border-radius: 10px;
+      height: 90vh;
+      text-align: center;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    #result-text {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+
+    #score-text {
+      font-size: 18px;
+    }
+
+    #reload{
+    
+      padding: 10px 60px;
+      font-size: 18px;
+      margin: 100px 0px 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      background-color: #4CAF50;
+      color: white;
+
+    }
+
+    #s50{
+      color:#25778a;
+    }
+
+  </style>
+</head>
+<body>
+  <!-- الصفحة الرئيسية -->
+  <div id="home-page" class="container">
+    <h1 >مرحبا بكم</h1></br><h1 >في من سيربح <span id="s50">الــخمسيــن</span></h1>
+    <button id="start-button" onclick="startGame()">بدء اللعبة</button>
+  </div>
+
+  <!-- صفحات الأسئلة -->
+  <div id="question-pages" class="container" style="display: none;"></div>
+
+  <!-- صفحة النتيجة -->
+  <div id="result-page" class="container" style="display: none;">
+    <div>
+      <h2 id="result-text"></h2>
+      <p id="score-text"></p>
+      <button id="reload" onclick="restartGame()">إعادة اللعبة</button>
+    </div>
+  </div>
+
+  <div id="footer">تم التطوير بواسطة معاد@ديجيتال</div>
+
+  <script>
+    let currentQuestion = 0;
+    let score = 0;
+    let questions;
+
+    function startGame() {
+      document.getElementById('home-page').style.display = 'none';
+      document.getElementById('question-pages').style.display = 'flex';
+      loadQuestions();
+      showQuestionPage(1);
+    }
+
+    function loadQuestions() {
+      // يمكنك استبدال هذا المصفوفة بجلب الأسئلة من مصدر خارجي مثل ملف JSON أو خادم
+      questions = [
+        
+        
+        
+        { question: 'ما هو الشهر الأول في التقويم الإسلامي؟', choices: ['يناير', 'محرم', 'شوال'], correctAnswer: 'محرم' },
+
+{ question: 'أول خليفة للمسلمين؟', choices: ['عمر ابن الخطاب', 'عثمان ابن عفان', 'أبو بكر الصديق'], correctAnswer: 'أبو بكر الصديق' },
+
+{ question: 'أين نشأ علم النحو؟', choices: ['الحجاز', 'الكوفة', 'البصرة'], correctAnswer: 'البصرة' },
+
+{ question: 'كنية علي بن أبي طالب؟', choices: ['أبو حسن', 'أبو بكر', 'أبو عبدالله'], correctAnswer: 'أبو حسن' },
+
+{ question: 'ما هي أكبر قارة في العالم؟', choices: ['أفريقيا', 'أمريكا', 'آسيا'], correctAnswer: 'آسيا' },
+
+{ question: 'ما هي عاصمة المملكة العربية السعودية؟', choices: ['الرياض', 'جدة', 'مكة المكرمة'], correctAnswer: 'الرياض' },
+
+{ question: 'ما هو أطول نهر في العالم؟', choices: ['النيل', 'الأمازون', 'اليانغتسي'], correctAnswer: 'النيل' },
+
+{ question: 'من هو النبي الذي بنى الكعبة ؟', choices: ['نوح', 'إبراهيم', 'موسى'], correctAnswer: 'إبراهيم' },
+
+{ question: 'إذا كانت طول الضلع في مربع هو 8 سم، فما مساحة المربع؟', choices: ['32', '40', '64'], correctAnswer: '64' },
+
+{ question: 'من هو مؤسس شركة "أبل"؟', choices: ['بيل جيتس', 'ستيف جوبز', 'مارك زوكربيرج'], correctAnswer: 'ستيف جوبز' },
+
+{ question: 'ما هي أقسام الكلام؟', choices: ['ماضي-مضارع-أمر', 'إسم-فعل-حرف', 'مبتدأ-خبر-'], correctAnswer: 'إسم-فعل-حرف' },
+
+{ question: 'من هو النبي الذي بنى السفينة ونجا بها من الطوفان؟', choices: ['نوح', 'إبراهيم', 'لوط'], correctAnswer: 'نوح' },
+
+{ question: 'ما هي عاصمة الأردن؟', choices: ['عمان', 'الكويت', 'بيروت'], correctAnswer: 'عمان' },
+
+{ question: 'ما هي عملة اليابان؟', choices: ['الروبل', 'الين', 'الدينار'], correctAnswer: 'الين' },
+
+{ question: 'من هو مؤسس شركة "مايكروسوفت"؟', choices: ['بيل جيتس', 'ستيف جوبز', 'مارك زوكربيرج'], correctAnswer: 'بيل جيتس' },
+
+{ question: 'من هو صاحب كتاب أدب الكاتب؟', choices: ['الجاحظ', 'ابن قتيبة', 'الخوارزمي'], correctAnswer: 'ابن قتيبة' },
+
+{ question: 'إذا كانت النسبة المئوية للخصم هي 20%، وكان سعر السلعة الأصلي 250 دولارًا، كم سيكون السعر بعد الخصم؟', choices: ['200 دولار', '220 دولار', '240 دولار'], correctAnswer: '200 دولار' },
+
+{ question: 'ما هو أكبر جبل في العالم من حيث الارتفاع؟', choices: ['إيفرست', 'كيليمنجارو', 'كانتري'], correctAnswer: 'إيفرست' },
+
+{ question: 'ما هو العنصر الرئيسي في الهواء؟', choices: ['الأكسجين', 'الهيدروجين', 'النيتروجين'], correctAnswer: 'النيتروجين' },
+
+{ question: 'من هو مؤسس شركة "تسلا" للسيارات؟', choices: ['إيلون ماسك', 'مارك زوكربيرج', 'لاري بيج'], correctAnswer: 'إيلون ماسك' },
+
+{ question: 'ما هو أكبر بحيرة في العالم من حيث المساحة؟', choices: ['البحيرة العظمى', 'بحيرة بايكال', 'بحيرة فيكتوريا'], correctAnswer: 'البحيرة العظمى' },
+
+{ question: 'ما هي عاصمة كندا؟', choices: ['تورونتو', 'فانكوفر', 'أوتاوا'], correctAnswer: 'أوتاوا' },
+
+{ question: 'من هو مؤسس شركة "أمازون"؟', choices: ['جيف بيزوس', 'مارك زوكربيرج', 'بيل جيتس'], correctAnswer: 'جيف بيزوس' },
+
+{ question: 'ما هو أصغر عنصر في الجدول الدوري؟', choices: ['الهيدروجين', 'الهيليوم', 'الليثيوم'], correctAnswer: 'الهيدروجين' },
+
+{ question: 'ما هي عاصمة استراليا؟', choices: ['سيدني', 'ملبورن', 'كانبرا'], correctAnswer: 'كانبرا' },
+
+{ question: 'من هو النبي الذي بُعث لقوم عاد؟', choices: ['صالح', 'شعيب', 'هود'], correctAnswer: 'هود' },
+
+{ question: 'من هو صاحب الأجرومية في النحو؟', choices: ['ابن مالك', 'الجوهري', 'ابن آب'], correctAnswer: 'ابن آب' },
+
+{ question: 'من هو صاحب الألفية في النحو؟', choices: ['ابن مالك', 'الجوهري', 'ابن آب'], correctAnswer: 'ابن مالك' },
+
+{ question: 'من هو النبي الذي بُعث لقوم مدين؟', choices: ['شعيب', 'لوط', 'إبراهيم'], correctAnswer: 'شعيب' },
+
+{ question: 'ما هي اللغة الرسمية في البرازيل؟', choices: ['البرتغالية', 'الاسبانية', 'البرازيلية'], correctAnswer: 'البرتغالية' },
+
+{ question: 'ما هو أكبر كوكب في النظام الشمسي؟', choices: ['زحل', 'المشتري', 'الأرض'], correctAnswer: 'المشتري' },
+
+{ question: 'ما هو اسم أكبر جبل في العالم من حيث الحجم؟', choices: ['ماونت إيفرست', 'ماونت كيليمنجارو', 'ماونت كينلي'], correctAnswer: 'ماونت كينلي' },
+
+{ question: 'ما هو عدد القارات في العالم؟', choices: ['5', '6', '7'], correctAnswer: '7' },
+
+{ question: 'ما هي عاصمة كوريا الجنوبية؟', choices: ['سول', 'بوسان', 'إنشيون'], correctAnswer: 'سول' },
+
+{ question: 'إذا كان 40% من عدد ما يساوي 60، فما هو هذا العدد؟', choices: ['100', '120', '150'], correctAnswer: '150' },
+
+{ question: 'ما هو العنصر الكيميائي الذي يرمز له بالرمز Fe؟', choices: ['الحديد', 'الألمنيوم', 'الزئبق'], correctAnswer: 'الحديد' },
+
+{ question: 'ما هو أصل الفلسفة اليونانية؟', choices: ['الهند', 'روما', 'مصر'], correctAnswer: 'روما' },
+
+{ question: 'ما هو اسم البحر الذي يفصل بين السعودية وإيران؟', choices: ['البحر الأحمر', 'البحر الكريم', 'الخليج العربي'], correctAnswer: 'الخليج العربي' },
+
+{ question: 'ما هي عاصمة دولة اليابان؟', choices: ['طوكيو', 'أوساكا', 'كيوتو'], correctAnswer: 'طوكيو' },
+
+{ question: ' تلميذ أرسطو و طاليس؟', choices: ['سقراط', 'أفلاطون', 'أناكسيماندر'], correctAnswer: 'أفلاطون' },
+
+{ question: 'ما هو اسم المؤرخ الفرنسي الشهير الذي كتب "العصور الوسطى"؟', choices: ['فرنسوا رابليه', 'جوستاف لوبون', 'ميشيل فوكو'], correctAnswer: 'جوستاف لوبون' },
+
+{ question: 'إذا كان طول مستطيل 8 سم وعرضه 5 سم، فما هو محيط المستطيل؟', choices: ['26 سم', '36 سم', '40 سم'], correctAnswer: '26 سم' },
+
+{ question: 'ما هي عاصمة جمهورية جنوب إفريقيا؟', choices: ['بريتوريا', 'كيب تاون', 'جوهانسبرغ'], correctAnswer: 'بريتوريا' },
+
+{ question: 'ما هو اسم المرض الذي يسببه فيروس نقص المناعة البشرية (HIV)؟', choices: ['السرطان', 'الإيدز', 'السكري'], correctAnswer: 'الإيدز' },
+
+{ question: 'إذا كانت 4 أضعاف العدد س + 5 يساوي 21، ما قيمة العدد س؟', choices: ['4', '5', '6'], correctAnswer: '4' },
+
+{ question: 'من هي الشخصية الأسطورية التي أسسها الرومان واعتبروها مؤسسة مدينة روما؟', choices: ['هرقل', 'ريموس', 'رومولوس'], correctAnswer: 'رومولوس' },
+
+{ question: 'ما هو اسم القارة التي يشكل فيها جبل كليمنجارو أعلى قمة؟', choices: ['أفريقيا', 'آسيا', 'أمريكا الشمالية'], correctAnswer: 'أفريقيا' },
+
+{ question: 'ما هي أكبر دولة في العالم من حيث المساحة؟', choices: ['الولايات المتحدة', 'روسيا', 'كندا'], correctAnswer: 'روسيا' },
+
+{ question: 'إذا كانت قيمة X تزيد بنسبة 20%، كم تكون الزيادة إذا كانت قيمة X تساوي 80؟', choices: ['16', '18', '20'], correctAnswer: '16' },
+
+{ question: 'من هو الأديب العربي الحاصل على جائزة نوبل في الأدب؟', choices: ['نجيب محفوظ', 'طه حسين', 'محمود درويش'], correctAnswer: 'نجيب محفوظ' },
+
+
+      ];
+
+      const questionPages = document.getElementById('question-pages');
+
+      questions.forEach((q, index) => {
+        const questionPage = document.createElement('div');
+        questionPage.id = `question-page-${index + 1}`;
+        questionPage.style.display = 'none';
+
+        const questionHeader = document.createElement('h2');
+        questionHeader.id = `question-${index + 1}`;
+        questionPage.appendChild(questionHeader);
+
+        q.choices.forEach(choice => {
+          const choiceButton = document.createElement('button');
+          choiceButton.className = 'choice-button';
+          choiceButton.textContent = choice;
+          choiceButton.onclick = function() {
+            nextQuestion(choice, index + 1);
+          };
+
+          questionPage.appendChild(choiceButton);
+        });
+
+        questionPages.appendChild(questionPage);
+      });
+    }
+
+    function showQuestionPage(questionNumber) {
+      // إخفاء جميع صفحات الأسئلة
+      for (let i = 1; i <= questions.length; i++) {
+        document.getElementById(`question-page-${i}`).style.display = 'none';
+      }
+
+      // إظهار صفحة السؤال الحالي
+      document.getElementById(`question-page-${questionNumber}`).style.display = 'block';
+
+      // تحميل السؤال
+      loadQuestion(questionNumber);
+    }
+
+    function loadQuestion(questionNumber) {
+      const currentQuestionObj = questions[questionNumber - 1];
+      document.getElementById(`question-${questionNumber}`).innerText = currentQuestionObj.question;
+
+      const choiceButtons = document.querySelectorAll(`#question-page-${questionNumber} .choice-button`);
+      for (let i = 0; i < choiceButtons.length; i++) {
+        choiceButtons[i].innerText = currentQuestionObj.choices[i];
+      }
+    }
+
+    function nextQuestion(userChoice, questionNumber) {
+      const currentQuestionObj = questions[questionNumber - 1];
+      if (userChoice === currentQuestionObj.correctAnswer) {
+        score++;
+      } else {
+        // إذا كانت الإجابة خاطئة، أظهر رسالة خطأ
+        alert('اجابتك خاطئة. الإجابة الصحيحة هي: ' + currentQuestionObj.correctAnswer);
+      }
+
+      if (questionNumber < questions.length) {
+        // إذا كان هناك مزيد من الأسئلة، انتقل إلى السؤال التالي
+        showQuestionPage(questionNumber + 1);
+      } else {
+        // عندما يتم الانتهاء من الأسئلة
+        showResult(questions.length);
+      }
+    }
+
+    function showResult(totalQuestions) {
+      document.getElementById('question-pages').style.display = 'none';
+      document.getElementById('result-page').style.display = 'flex';
+
+      const resultPage = document.getElementById('result-page');
+      resultPage.style.backgroundColor = '#eff4f9';
+      resultPage.style.borderRadius = '10px';
+      resultPage.style.padding = '20px';
+      resultPage.style.textAlign = 'center';
+      resultPage.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.1)';
+
+      document.getElementById('result-text').style.fontSize = '24px';
+      document.getElementById('score-text').style.fontSize = '18px';
+
+      if (score >(( totalQuestions/3)*2)) {
+        document.getElementById('result-text').innerText = '!! مـمــــتــــــاز ';
+      } else if(score >(( totalQuestions/3)*1)){
+        document.getElementById('result-text').innerText = 'حــاول مجددا';
+      }else{document.getElementById('result-text').innerText = 'بصراحــة, تستحق عقوبـة';}
+
+      document.getElementById('score-text').innerText = 'ربحــت : ' + score + ' درهـم مـن ' + totalQuestions +' لكنك لن تحصل عليها طــبعــــا ';
+    }
+
+function restartGame() {
+      // إعادة تعيين الفرق والسؤال الحالي
+      score = 0;
+      currentQuestion = 0;
+
+      // إظهار الصفحة الرئيسية
+      document.getElementById('home-page').style.display = 'flex';
+      document.getElementById('question-pages').style.display = 'none';
+      document.getElementById('result-page').style.display = 'none';
+    }
+
+  </script>
+</body>
+</html>
